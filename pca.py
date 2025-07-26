@@ -55,26 +55,28 @@ cv2.imshow('Detected Faces', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
+
 # --------------- Sử dụng PCA để giảm chiều dữ liệu khuôn mặt ---------------
 # Bước 1: Thực hiện SVD trên ma trận X đã chuẩn hóa
 U, S, Vt = np.linalg.svd(X, full_matrices=False)
 # Vt.shape = (2500, 2500) → mỗi hàng của Vt là 1 eigenface
 
-# Bước 2: Chọn k chiều chính (eigenfaces)
+# Bước 2: Sắp xếp các thành phần PCA theo độ lớn singular values (S)
+# (Vì np.linalg.svd đã trả về theo thứ tự giảm dần nên ta vẫn dùng [:k])
 k = 50  # số chiều PCA giữ lại
-eigenfaces = Vt[:k, :]  # ma trận k x 2500, mỗi hàng là 1 eigenface
+eigenfaces = Vt[:k, :]  # Ma trận (k x 2500), mỗi hàng là 1 eigenface tương ứng với trị riêng lớn nhất
 
-# Bước 3: Biểu diễn các khuôn mặt trong không gian PCA (mỗi khuôn mặt sẽ được biểu diễn bằng vector 50 chiều)
-X_pca = X @ eigenfaces.T  # Mỗi khuôn mặt ban đầu (2500 chiều) bây giờ đã được biểu diễn bằng vector 50 chiều 
+# Bước 3: Biểu diễn các khuôn mặt trong không gian PCA
+X_pca = X @ eigenfaces.T  # Mỗi khuôn mặt từ 2500 chiều → vector 50 chiều
 
-# Bước 4: Trích xuất khuôn mặt đầu tiên từ không gian PCA
-approx_face0 = X_pca[0] @ eigenfaces  # vector 1x2500
+# Bước 4: Trích xuất và tái tạo lại khuôn mặt đầu tiên từ PCA (50 chiều → 2500 chiều)
+approx_face0 = X_pca[0] @ eigenfaces  # vector 1 x 2500
 approx_face0_image = approx_face0.reshape(50, 50)
 
 # Bước 5: Hiển thị ảnh khuôn mặt đầu tiên được tái tạo từ PCA
 import matplotlib.pyplot as plt
 plt.imshow(approx_face0_image, cmap='gray')
-plt.title('Reconstructed Face from PCA')   
+plt.title('Reconstructed Face from PCA (k=50)')
 plt.axis('off')
 plt.show()
 # --------------- Kết thúc PCA và hiển thị ảnh khuôn mặt đã tái tạo ---------------
