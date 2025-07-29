@@ -16,7 +16,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 faces = face_cascade.detectMultiScale(
             gray, 
             scaleFactor=1.2, # Tỷ lệ thu phóng trong khoảng 1.1-1.3, ở đây là 1.2 thì ảnh sẽ giảm 20% mỗi lần, giúp phát hiện khuôn mặt nhỏ hơn nhưng chậm
-            minNeighbors=6, # Số lượng vùng lân cận cần thiết để xác định một khuôn mặt, giá trị từ 3-6, giá trị cao hơn sẽ giảm số lượng phát hiện nhưng tăng độ chính xác
+            minNeighbors=6,  # Số lượng vùng lân cận cần thiết để xác định một khuôn mặt, giá trị từ 3-6, giá trị cao hơn sẽ giảm số lượng phát hiện nhưng tăng độ chính xác
             minSize=(20, 20) # Kích thước tối thiểu của khuôn mặt, giá trị này có thể điều chỉnh tùy theo kích thước khuôn mặt trong ảnh
 )
 # --> Kết quả trả về danh sách các tọa độ (x, y, w, h) của các khuôn mặt phát hiện được
